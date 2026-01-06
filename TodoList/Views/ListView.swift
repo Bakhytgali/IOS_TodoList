@@ -8,18 +8,15 @@
 import SwiftUI
 
 struct ListView: View {
-    @State var items: [ItemModel] = [
-        ItemModel(title: "Wash my hair", isCompleted: true),
-        ItemModel(title: "Eat breakfast"),
-        ItemModel(title: "Dry my hair"),
-        ItemModel(title: "Get ready for work"),
-        ItemModel(title: "Go to work"),
-    ]
+    @EnvironmentObject var listViewModel: ListViewModel
+    
     var body: some View {
         List {
-            ForEach(items) { item in
+            ForEach(listViewModel.items) { item in
                 ListRowView(item: item)
             }
+            .onDelete(perform: listViewModel.deleteItem)
+            .onMove(perform: listViewModel.moveItem)
         }
         .navigationTitle("Todo List 📝")
         .navigationBarItems(
@@ -37,4 +34,5 @@ struct ListView: View {
     NavigationStack {
         ListView()
     }
+    .environmentObject(ListViewModel())
 }
